@@ -47,20 +47,15 @@ ARCHITECTURE behavior OF myDDS_TB IS
     -- Component Declaration for the Unit Under Test (UUT)
 	COMPONENT dds
 	Port ( 
-		clk   : in  STD_LOGIC;
-		freq  : IN  unsigned(7 downto 0);
-		debug : OUT  unsigned(21 downto 0);
-		sDebug : OUT  signed(15 downto 0)
+      clk  : in   STD_LOGIC;
+      freq : in   unsigned(7 downto 0);-- 0bit,8bit,0bit
+      sig  : OUT  signed(15 downto 0)
 	 );
 	END COMPONENT;
     
 	signal clk : std_logic := '0';
 	signal freq: unsigned(7 downto 0):=to_unsigned(5, 8);
-	signal debugData : unsigned(21 downto 0):=to_unsigned(0, 22);
-	signal sDebugData:   signed(15 downto 0):=to_signed(0, 16);
-	signal freq2: unsigned(7 downto 0):=to_unsigned(10, 8);
-	signal debugData2 : unsigned(21 downto 0):=to_unsigned(0, 22);
-	signal sDebugData2:   signed(15 downto 0):=to_signed(0, 16);
+	signal sig:   signed(15 downto 0):=to_signed(0, 16);
    -- Clock period definitions
    constant clk_period : time := 100 ns;
  
@@ -70,14 +65,7 @@ BEGIN
 	Inst_dds: dds PORT MAP(
 		clk => clk,
 		freq => freq,
-		debug => debugData,
-		sDebug => sDebugData
-	);
-	Inst_dds2: dds PORT MAP(
-		clk => clk,
-		freq => freq2,
-		debug => debugData2,
-		sDebug => sDebugData2
+		sig => sig
 	);
 
    -- Clock process definitions
@@ -114,9 +102,7 @@ BEGIN
          output_time:=now;
          write(output_line, output_time, right);
 			write(output_line, ", ", right);
-         write(output_line, to_integer(sDebugData), right);
-			write(output_line, ", ", right);
-			write(output_line, to_integer(sDebugData2), right);
+         write(output_line, to_integer(sig), right);
          writeline(output_file, output_line);
       end if;
    end process;

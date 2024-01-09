@@ -38,10 +38,9 @@ entity dds is
         CLK_FREQ  :  positive := 200
 	 );
     Port ( 
-		clk    : in   STD_LOGIC;
-		freq   : in   unsigned(DATA_WIDTH-1 downto 0);-- 0bit,8bit,0bit
-		debug  : OUT  unsigned(21 downto 0);
-		sDebug : OUT  signed(FREG_WIDTH+1 downto 0)
+		clk  : in   STD_LOGIC;
+		freq : in   unsigned(DATA_WIDTH-1 downto 0);-- 0bit,8bit,0bit
+		sig  : OUT  signed(FREG_WIDTH+1 downto 0)
 	 );
 end dds;
 
@@ -109,7 +108,7 @@ begin
 	
 	-- prepare phi index
 	currPhiInd <= currentPhi(9+FREG_WIDTH-1 downto FREG_WIDTH);
-	debug  <= resize(currPhiInd, 22);
+	-- debug  <= resize(currPhiInd, 22);
 	process(clk)
 	variable deg360:  unsigned(9+FREG_WIDTH-1 downto 0):=to_unsigned(5898240,9+FREG_WIDTH);
 	begin
@@ -121,7 +120,7 @@ begin
 			nextPhi    <= resize(PhSt, 9+FREG_WIDTH);
 			end if;
 			
-			sDebug <= sin_LUT(to_integer(currPhiInd));
+			sig <= sin_LUT(to_integer(currPhiInd));
 		end if;
 	end process;
 
