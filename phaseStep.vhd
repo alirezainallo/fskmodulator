@@ -32,7 +32,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity myDDS is
+entity phaseStep is
 	 generic (
         DATA_WIDTH:  positive := 8;
         FREG_WIDTH:  positive := 14;
@@ -43,10 +43,10 @@ entity myDDS is
         freq    : in   unsigned(DATA_WIDTH-1 downto 0);-- 0bit,8bit,0bit
         PhSt    : out  unsigned(DATA_WIDTH+FREG_WIDTH-1 downto 0):=to_unsigned(0,DATA_WIDTH+FREG_WIDTH) -- 0bit,8bit,14bit
     );
-end entity myDDS;
+end entity phaseStep;
 
 
-architecture Behavioral of myDDS is
+architecture Behavioral of phaseStep is
 signal phaseFactor: unsigned(FREG_WIDTH-1 downto 0):= to_unsigned(515,FREG_WIDTH); -- (2*pi*(2^14)/CLK_FREQ) -- 14bit franctional
 begin
     process(clk)
