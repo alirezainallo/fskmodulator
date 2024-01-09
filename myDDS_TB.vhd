@@ -45,27 +45,28 @@ END myDDS_TB;
 ARCHITECTURE behavior OF myDDS_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
-	COMPONENT dds
-	Port ( 
-      clk  : in   STD_LOGIC;
-      freq : in   unsigned(7 downto 0);-- 0bit,8bit,0bit
-      sig  : OUT  signed(15 downto 0)
-	 );
+	COMPONENT fskModulator
+	PORT(
+		clk : IN std_logic;
+		Rx : IN std_logic;
+		Tx : OUT signed(15 downto 0)
+		);
 	END COMPONENT;
     
 	signal clk : std_logic := '0';
-	signal freq: unsigned(7 downto 0):=to_unsigned(5, 8);
-	signal sig:   signed(15 downto 0):=to_signed(0, 16);
+	signal Rx  : std_logic := '0';
+	signal sig : signed(15 downto 0):=to_signed(0, 16);
    -- Clock period definitions
    constant clk_period : time := 100 ns;
+	constant Rx_period  : time := 3 ms;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-	Inst_dds: dds PORT MAP(
+	Inst_fskModulator: fskModulator PORT MAP(
 		clk => clk,
-		freq => freq,
-		sig => sig
+		Rx => Rx,
+		Tx => sig
 	);
 
    -- Clock process definitions
@@ -75,6 +76,15 @@ BEGIN
 		wait for clk_period/2;
 		clk <= '1';
 		wait for clk_period/2;
+   end process;
+	
+	-- Rx process definitions
+   Rx_process :process
+   begin
+		Rx <= '0';
+		wait for Rx_period/2;
+		Rx <= '1';
+		wait for Rx_period/2;
    end process;
  
 
@@ -101,7 +111,9 @@ BEGIN
          -- File operations
          output_time:=now;
          write(output_line, output_time, right);
-			write(output_line, ", ", right);
+			write(output_line, " ", right);
+         write(output_line, Rx, right);
+			write(output_line, " ", right);
          write(output_line, to_integer(sig), right);
          writeline(output_file, output_line);
       end if;
