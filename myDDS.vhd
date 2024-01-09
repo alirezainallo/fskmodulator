@@ -34,31 +34,27 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity myDDS is
 	 generic (
-		  DATA_WIDTH:  positive := 8;
-		  FREG_WIDTH:  positive := 14;
-		  CLK_FREQ  :  positive := 200
+        DATA_WIDTH:  positive := 8;
+        FREG_WIDTH:  positive := 14;
+        CLK_FREQ  :  positive := 200
 	 );
     Port (
         clk     : in   STD_LOGIC;
-		  freq    : in   unsigned(DATA_WIDTH-1 downto 0);
-		  PhSt    : out  unsigned(DATA_WIDTH+FREG_WIDTH-1 downto 0):=to_unsigned(0,22)
+        freq    : in   unsigned(DATA_WIDTH-1 downto 0);
+        PhSt    : out  unsigned(DATA_WIDTH+FREG_WIDTH-1 downto 0):=to_unsigned(0,22)
     );
 end entity myDDS;
 
 
 architecture Behavioral of myDDS is
--- signal phaseStep: UNSIGNED(DATA_WIDTH + FRACTIONAL_WIDTH - 1 downto 0) := to_unsigned(0, DATA_WIDTH + FRACTIONAL_WIDTH);
--- variable res:       UNSIGNED(DATA_WIDTH + FRACTIONAL_WIDTH - 1 downto 0) := to_unsigned(0, DATA_WIDTH + FRACTIONAL_WIDTH);
--- variable res:       integer := 0; 
--- variable res:       integer := 0; 
 begin
     process (clk)
     begin
        --  res := tmp * pi;
-		  if rising_edge(clk) then
-			
-		  end if;
-		  PhSt(0) <= clk;
+        if rising_edge(clk) then
+        
+        end if;
+        PhSt(0) <= clk;
     end process;
 
 end Behavioral;
