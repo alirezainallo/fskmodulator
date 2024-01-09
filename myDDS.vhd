@@ -49,12 +49,13 @@ end entity myDDS;
 architecture Behavioral of myDDS is
 begin
     process (clk)
+    variable pi3_14:  unsigned(15 downto 0) := to_unsigned(51470,16);
+	variable factor : unsigned(2  downto 0) := to_unsigned(5,3);
     begin
-       --  res := tmp * pi;
         if rising_edge(clk) then
-        
+            PhSt <=  resize(pi3_14 * factor, 22);
         end if;
-        PhSt(0) <= clk;
+        -- PhSt(1) <= clk;
     end process;
 
 end Behavioral;
