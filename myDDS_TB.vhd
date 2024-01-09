@@ -39,34 +39,29 @@ END myDDS_TB;
 ARCHITECTURE behavior OF myDDS_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
- 
-    COMPONENT myDDS
-    PORT(
-         clk : IN  std_logic;
-         freq : IN  unsigned(7 downto 0);
-         PhSt : OUT  unsigned(21 downto 0)
-        );
-    END COMPONENT;
+	COMPONENT dds
+	Port ( 
+		clk   : in  STD_LOGIC;
+		freq  : IN  unsigned(7 downto 0);
+		debug : OUT  unsigned(21 downto 0);
+		sDebug : OUT  signed(15 downto 0)
+	 );
+	END COMPONENT;
     
-
-   --Inputs
-   signal clk : std_logic := '0';
-   signal freq : unsigned(7 downto 0) := (others => '0');
-
- 	--Outputs
-   signal PhSt : unsigned(21 downto 0);
-
+	signal clk : std_logic := '0';
+	signal freq: unsigned(7 downto 0):=to_unsigned(5, 8);
+	signal debugData: unsigned(21 downto 0):=to_unsigned(0, 22);
    -- Clock period definitions
-   constant clk_period : time := 10 ns;
+   constant clk_period : time := 100 ns;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: myDDS PORT MAP (
-          clk => clk,
-          freq => freq,
-          PhSt => PhSt
-        );
+	Inst_dds: dds PORT MAP(
+		clk => clk,
+		freq => freq,
+		debug => debugData
+	);
 
    -- Clock process definitions
    clk_process :process
@@ -87,9 +82,6 @@ BEGIN
       wait for clk_period*10;
 
       -- insert stimulus here 
-		freq <= to_unsigned(5,8);
-		wait for clk_period*10;
-		freq <= to_unsigned(20,8);
       wait;
    end process;
 
