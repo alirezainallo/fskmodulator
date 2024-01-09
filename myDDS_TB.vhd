@@ -26,9 +26,10 @@
 -- simulation model.
 --------------------------------------------------------------------------------
 LIBRARY ieee;
-use std.textio.all;
+use STD.textio.all;
 use IEEE.NUMERIC_STD.ALL;
 USE ieee.std_logic_1164.ALL;
+use ieee.std_logic_textio.all;
  
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -106,9 +107,13 @@ BEGIN
    process(clk)   
       file     output_file : text is out OUTPUT_FILE_NAME;
       variable output_line : line;
+      variable output_time : time;
    begin
       if rising_edge(clk) then
          -- File operations
+         output_time:=now;
+         write(output_line, output_time, right);
+			write(output_line, ", ", right);
          write(output_line, to_integer(sDebugData), right);
 			write(output_line, ", ", right);
 			write(output_line, to_integer(sDebugData2), right);
