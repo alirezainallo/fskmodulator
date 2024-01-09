@@ -4,7 +4,12 @@ def print_fixed2signed(num, franctions):
     toPrint = num * pow(2,abs(franctions))
     retVal = round(toPrint)
     print(str(num)+"=>" ,retVal)
-    print("bitNum:", math.ceil(math.log2(retVal)))
+    if abs(num) < 1:
+        print("bitNum:", abs(franctions))
+        pass
+    else:
+        print("bitNum:", math.ceil(math.log2(retVal)))
+        pass
     return retVal
 def print_signed2fixed(num, francNum):
     fixed = num / pow(2, francNum)
@@ -26,11 +31,11 @@ print("-------------------------------")
 num = 3.1415
 print_fixed2signed(num, frantionalNum)
 print("-------------------------------")
-print_fixed2signed(2.5, 1)
+print_fixed2signed(3.1415*2/200, 14)
 print("-------------------------------")
 # res = int(input("enter your unsigend number: "))
 # francNum = int(input("enter your franctional num: "))
-res = 257350
-francNum = 1+14
+res = 10300
+francNum = 14
 print_signed2fixed(res, francNum)
 print("-------------------------------")

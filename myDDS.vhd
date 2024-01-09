@@ -40,22 +40,21 @@ entity myDDS is
 	 );
     Port (
         clk     : in   STD_LOGIC;
-        freq    : in   unsigned(DATA_WIDTH-1 downto 0);
-        PhSt    : out  unsigned(DATA_WIDTH+FREG_WIDTH-1 downto 0):=to_unsigned(0,22)
+        freq    : in   unsigned(DATA_WIDTH-1 downto 0);-- 0bit,8bit,0bit
+        PhSt    : out  unsigned(DATA_WIDTH+FREG_WIDTH-1 downto 0):=to_unsigned(0,22) -- 0bit,8bit,14bit
     );
 end entity myDDS;
 
 
 architecture Behavioral of myDDS is
+signal phaseFactor: unsigned(FREG_WIDTH-1 downto 0):= to_unsigned(515,14); -- (2*pi*(2^14)/CLK_FREQ) -- 14bit franctional
 begin
-    process (clk)
-    variable pi3_14:  unsigned(15 downto 0) := to_unsigned(51470,16);
-	variable factor : unsigned(2  downto 0) := to_unsigned(5,3);
+    process(clk)
+    -- variable pi3_14:  unsigned(15 downto 0) := to_unsigned(51470,16);
     begin
         if rising_edge(clk) then
-            PhSt <=  resize(pi3_14 * factor, 22);
+            PhSt <= phaseFactor * freq;
         end if;
-        -- PhSt(1) <= clk;
     end process;
 
 end Behavioral;

@@ -87,7 +87,9 @@ BEGIN
       wait for clk_period*10;
 
       -- insert stimulus here 
-
+		freq <= to_unsigned(5,8);
+		wait for clk_period*10;
+		freq <= to_unsigned(20,8);
       wait;
    end process;
 
