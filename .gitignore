@@ -59,7 +59,6 @@ transcript
 *.xpi
 *.lst
 *.xbcd
-*.txt
 *.par
 *.pcf
 *.ptwx

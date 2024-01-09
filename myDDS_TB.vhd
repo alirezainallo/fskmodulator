@@ -26,6 +26,7 @@
 -- simulation model.
 --------------------------------------------------------------------------------
 LIBRARY ieee;
+use std.textio.all;
 use IEEE.NUMERIC_STD.ALL;
 USE ieee.std_logic_1164.ALL;
  
@@ -34,6 +35,10 @@ USE ieee.std_logic_1164.ALL;
 --USE ieee.numeric_std.ALL;
  
 ENTITY myDDS_TB IS
+   Generic(
+      OUTPUT_FILE_NAME : string := "dds_output.txt";   -- File path and name
+      DATA_WIDTH   : integer := 16
+    );
 END myDDS_TB;
  
 ARCHITECTURE behavior OF myDDS_TB IS 
@@ -50,7 +55,11 @@ ARCHITECTURE behavior OF myDDS_TB IS
     
 	signal clk : std_logic := '0';
 	signal freq: unsigned(7 downto 0):=to_unsigned(5, 8);
-	signal debugData: unsigned(21 downto 0):=to_unsigned(0, 22);
+	signal debugData : unsigned(21 downto 0):=to_unsigned(0, 22);
+	signal sDebugData:   signed(15 downto 0):=to_signed(0, 16);
+	signal freq2: unsigned(7 downto 0):=to_unsigned(10, 8);
+	signal debugData2 : unsigned(21 downto 0):=to_unsigned(0, 22);
+	signal sDebugData2:   signed(15 downto 0):=to_signed(0, 16);
    -- Clock period definitions
    constant clk_period : time := 100 ns;
  
@@ -60,7 +69,14 @@ BEGIN
 	Inst_dds: dds PORT MAP(
 		clk => clk,
 		freq => freq,
-		debug => debugData
+		debug => debugData,
+		sDebug => sDebugData
+	);
+	Inst_dds2: dds PORT MAP(
+		clk => clk,
+		freq => freq2,
+		debug => debugData2,
+		sDebug => sDebugData2
 	);
 
    -- Clock process definitions
@@ -83,6 +99,21 @@ BEGIN
 
       -- insert stimulus here 
       wait;
+   end process;
+
+
+   -- out file
+   process(clk)   
+      file     output_file : text is out OUTPUT_FILE_NAME;
+      variable output_line : line;
+   begin
+      if rising_edge(clk) then
+         -- File operations
+         write(output_line, to_integer(sDebugData), right);
+			write(output_line, ", ", right);
+			write(output_line, to_integer(sDebugData2), right);
+         writeline(output_file, output_line);
+      end if;
    end process;
 
 END;

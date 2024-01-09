@@ -49,9 +49,9 @@ architecture Behavioral of dds is
     
 	COMPONENT phaseStep
     PORT(
-         clk  : IN  std_logic;
-         freq : IN  unsigned(7 downto 0);
-         PhSt : OUT  unsigned(21 downto 0)
+		clk  : IN  std_logic;
+		freq : IN  unsigned(7 downto 0);
+		PhSt : OUT  unsigned(21 downto 0)
         );
     END COMPONENT;
 
@@ -102,27 +102,26 @@ architecture Behavioral of dds is
 begin
 
 	Inst_PhSt: phaseStep PORT MAP (
-         clk  => clk,
-         freq => freq,
-         PhSt => PhSt
+		clk  => clk,
+		freq => freq,
+		PhSt => PhSt
         );
 	
 	-- prepare phi index
 	currPhiInd <= currentPhi(9+FREG_WIDTH-1 downto FREG_WIDTH);
 	debug  <= resize(currPhiInd, 22);
-	sDebug <= sin_LUT(to_integer(currPhiInd));
 	process(clk)
 	variable deg360:  unsigned(9+FREG_WIDTH-1 downto 0):=to_unsigned(5898240,9+FREG_WIDTH);
 	begin
 		if rising_edge(clk) then
-			 nextPhi    <= currentPhi+resize(PhSt, 9+FREG_WIDTH)+resize(PhSt, 9+FREG_WIDTH);
-			 currentPhi <= currentPhi+resize(PhSt, 9+FREG_WIDTH);
-			 if(nextPhi > deg360) then
-				currentPhi <= to_unsigned(0, 9+FREG_WIDTH);
-				nextPhi    <= resize(PhSt, 9+FREG_WIDTH);
-			 end if;
-			 
-			 
+			nextPhi    <= currentPhi+resize(PhSt, 9+FREG_WIDTH)+resize(PhSt, 9+FREG_WIDTH);
+			currentPhi <= currentPhi+resize(PhSt, 9+FREG_WIDTH);
+			if(nextPhi > deg360) then
+			currentPhi <= to_unsigned(0, 9+FREG_WIDTH);
+			nextPhi    <= resize(PhSt, 9+FREG_WIDTH);
+			end if;
+			
+			sDebug <= sin_LUT(to_integer(currPhiInd));
 		end if;
 	end process;
 
